@@ -1,7 +1,7 @@
 # phaser_game_it2
 Iteration Two of the Phaser3 Prototype Project
 
-Morning Session 25/3/19 - Update Pickup System
+# Morning Session 25/3/19 - Update Pickup System
 
 Updated pickup system
  - Can no longer only collide with pickups to collect them
