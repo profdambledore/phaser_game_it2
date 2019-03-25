@@ -1,0 +1,2 @@
+https://www.w3schools.com/cssref/playit.asp?filename=playcss_filter&preval=contrast(200%25)
+https://stackoverflow.com/questions/52922948/glow-effect-in-phaser3
