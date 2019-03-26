@@ -13,3 +13,13 @@ Need to do -
  - If they are, and the pick-up is clicked, call the useDrop function
  - Remove the event listener
  - Hide the hitbox
+
+# Evening Session 25/3/19 - Further Updates to Pickups
+
+Updated pickup code
+ - Has an additional sprite attached to pickups - hitbox
+    - This hitbox is currently visible, will need to be changed to invisible
+ - Added pointerdown listener to all pickups, only over pickups
+
+Need to do
+ - Continue on overlap code, currently doesn't work
