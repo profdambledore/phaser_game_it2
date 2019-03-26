@@ -130,23 +130,27 @@ class BasePowerup {
 		this.player = player;
 		this.hull = this.scene.physics.add.sprite(x, y, texture);
 		this.hitBox = this.scene.physics.add.sprite(x, y, 'hitbox');
-		this.hitBox.body.setSize(200, 200);
+        this.hitBox.body.setSize(200, 200);
+        this.hitBox.setVisible(false);
 		this.hull.body.collideWorldBounds = true;
 		this.hull.setDepth(4);
-		this.hull.on('pointerdown', this.clickPickupDown, this);
-		this.check = this.scene.physics.add.overlap(this.player, this.hitBox)
+        this.hull.on('pointerdown', this.clickPickupDown, this);
+        this.check = false;
+        this.scene.physics.add.overlap(this.player.hull, this.hitBox, () => {
+            this.check = true;   
+        }, null, this.scene)
 	}
 	
 	clickPickupDown(pointer) {
-		console.log(this.hitBox);
-		if (this.check == true) {
-			console.log("Hello")
+        if (this.check == true) {
+			useDrop.call(this.scene, this.hull, this.player.hull)
 		}
-		console.log("Behind");
 	}
 	
-	collected() {
-		this.hull.destroy();
+    collected() {
+        this.hull.removeListener('pointerdown', this.clickPickupDown, this)
+        this.hull.destroy();
+        this.hitBox.destroy();
 	}
 }
 

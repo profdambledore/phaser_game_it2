@@ -159,6 +159,7 @@ function createEnemy(level, player, map) {
             enemy = new Level0Enemy(this, 576, 576, player);
             enemies.push(enemy);
             this.physics.add.overlap(player.hull, enemy.hull, meleeDamage, null, this);
+            console.log(this);
             break;
 		
 		case 1:
@@ -304,15 +305,15 @@ function createDrop(level, locX, locY) {
 		return;
 	}
 	else {
-		if (spawnChance <= 10) {
+        if (spawnChance <= 10) {
 			speedDrop = new SpeedPowerup(this, locX, locY, player);
 			speedDrop.hull.setInteractive();
-			drops.push(speedDrop);
+            drops.push(speedDrop);
 		}
-		else if (spawnChance >= 95) {
+        else if (spawnChance >= 95) {
 			healthDrop = new HealthPowerup(this, locX, locY, player);
 			healthDrop.hull.setInteractive();
-			drops.push(healthDrop);
+            drops.push(healthDrop);
 		}
 	}
 }
@@ -337,5 +338,4 @@ function useDrop(hull, playerHull) {
 		drop.collected();
 		drops.splice(index, 1);
 	}
-	drop.hull.remove('pointerdown', clickPickupDown)
 }
