@@ -26,3 +26,17 @@ created assets
 
 Need to do
  - Continue on overlap code, currently doesn't work
+
+# Morning Session 26/3/19 - Finished updating pickups
+
+Finished updating Pickups
+Session livestreamed at - https://www.twitch.tv/profdambledore - view for all that went on
+
+Pickups now
+ - Have a invisible hitbox
+ - This requires the player to be in the hitbox to collect the pickup
+ - The player has to click on the pickup to collect it now, intead of colliding with it
+
+Errors found
+ - The player only needs to collide with the hitbox once to allow the pickup to be used
+    - They can collide with the hitbox, then run away, and still be able to user the pickup
