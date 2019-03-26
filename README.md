@@ -21,5 +21,8 @@ Updated pickup code
     - This hitbox is currently visible, will need to be changed to invisible
  - Added pointerdown listener to all pickups, only over pickups
 
+created assets
+ - Created new shotgun pickup asset in .psd
+
 Need to do
  - Continue on overlap code, currently doesn't work
