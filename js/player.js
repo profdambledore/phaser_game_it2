@@ -65,6 +65,9 @@ class Player {
         this.scene.physics.add.collider(this.hull, mainLayer);
     }
 	
+	// Sets the players weapon to the selected one
+	// 1 = Pistol
+	// 2 = Shotgun
 	setType(weapon) {
 		this.weaponType = weapon;
 	}

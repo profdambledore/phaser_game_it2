@@ -5,7 +5,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
             gravity: {
                 y: 0
             }
@@ -59,7 +59,7 @@ function preload() {
 
 function create() {
 	// Create weaponCtrl
-	weaponCtrl = new WeaponCtrl();
+	weaponCtrl = new WeaponCtrl(this);
 	
     // Create Map from JSON
     this.map = this.make.tilemap({ key: 'backTilemap' });
@@ -83,10 +83,6 @@ function create() {
     //this.cameras.main.startFollow(player.hull, true, 0.5, 0.5);
 
     // Create base bullet group for the player
-    pistolBullets = this.physics.add.group({
-        defaultKey: 'playerBullet',
-        maxSize: 5
-    });
     this.input.on('pointerdown', tryShoot, this);
 
     this.physics.world.on('worldbounds', function (body) {
@@ -159,7 +155,6 @@ function createEnemy(level, player, map) {
             enemy = new Level0Enemy(this, 576, 576, player);
             enemies.push(enemy);
             this.physics.add.overlap(player.hull, enemy.hull, meleeDamage, null, this);
-            console.log(this);
             break;
 		
 		case 1:
@@ -207,16 +202,18 @@ function createRound(player, map) {
 function tryShoot(pointer) {
     var type = player.getType();
     if (type == 1) {
-        var bullet = pistolBullets.get(player.hull.x, player.hull.y);
+        var bullet = weaponCtrl.pistolBullets.get(player.hull.x, player.hull.y);
         if (bullet) {
             fireBullet.call(this, bullet, player.hull.rotation, enemies);
         }
     }
     else if (type == 2) {
-        var bullet = shotgunBullets.get(player.hull.x, player.hull.y);
-        if (bullet) {
-            fireBullet.call(this, bullet, player.hull.rotation, enemies);
-        }
+		for (var j = 0; j < 9; j++) {
+			var bullet = weaponCtrl.shotgunBullets.get(player.hull.x, player.hull.y);
+			if (bullet) {
+				fireBullet.call(this, bullet, player.hull.rotation, enemies);
+			}
+		}
     }
 }
 
@@ -228,10 +225,8 @@ function fireBullet(bullet, rotation, target) {
             this.physics.velocityFromRotation(bullet.rotation, 500, bullet.body.velocity);
         }
         else if (type === 2) {
-            for (var j = 0; j < 8; j++) {
-                weaponCtrl.weaponTypeTwo(bullet, rotation);
-                this.physics.velocityFromRotation(bullet.rotation, 200, bullet.body.velocity);
-            }
+			weaponCtrl.weaponTypeTwo(bullet, rotation);
+			this.physics.velocityFromRotation(bullet.rotation, 200, bullet.body.velocity);
         }
     }
 	else {
@@ -301,6 +296,7 @@ function meleeDamage() {
 
 function createDrop(level, locX, locY) {
 	var spawnChance = Phaser.Math.Between(0, 100);
+	console.log(spawnChance);
 	if (level == 0) {
 		return;
 	}
@@ -309,6 +305,11 @@ function createDrop(level, locX, locY) {
 			speedDrop = new SpeedPowerup(this, locX, locY, player);
 			speedDrop.hull.setInteractive();
             drops.push(speedDrop);
+		}
+		else if (spawnChance >= 45 && spawnChance <= 55) {
+			shotgunPickup = new ShotgunPickup(this, locX, locY, player);
+			shotgunPickup.hull.setInteractive();
+			drops.push(shotgunPickup);
 		}
         else if (spawnChance >= 95) {
 			healthDrop = new HealthPowerup(this, locX, locY, player);
@@ -335,6 +336,10 @@ function useDrop(hull, playerHull) {
 	}
 	else if (drop.dropType == 'health') {	
 		player.setHealth(20);
+		drop.collected();
+		drops.splice(index, 1);
+	}
+	else if (drop.dropType == 'weapon_shotgun') {
 		drop.collected();
 		drops.splice(index, 1);
 	}
