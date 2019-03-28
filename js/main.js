@@ -43,10 +43,12 @@ function preload() {
     // Load Image Assets - Player
     this.load.image('player', 'assets/player.png')
     this.load.image('playerBullet', 'assets/playerBullet.png')
+	this.load.image('playerPellet', 'assets/playerPellet.png');
 	this.load.image('hitbox', 'assets/hitbox.png');
 	this.load.image('health_pickup', 'assets/health.png')
 	this.load.image('speed_pickup', 'assets/speedBoost.png');
 	this.load.image('shotgun_pickup', 'assets/shotgun.png');
+	this.load.image('pistol_pickup', 'assets/pistol.png');
 
     // Load Image Assets - Enemy
 	// Level 1
@@ -55,6 +57,9 @@ function preload() {
 	// Level 2
 	this.load.image('enemy2', 'assets/enemy2.png')
 	this.load.image('enemy2Bullet', 'assets/enemy2Bullet.png');
+	
+	// Level 3
+	this.load.image('enemy3', 'assets/enemy3.png')
 }
 
 function create() {
@@ -121,7 +126,7 @@ function update(time, delta) {
 		this.levelText.setText('SPD = MAX');
 		updated = true;
 	}
-	else {
+	else if (updated == false) {
 		this.levelText.setText('SPD = ' + player.spdLvl);
 	}
 
@@ -135,10 +140,6 @@ function update(time, delta) {
         createEnemy.call(this, 0, player, this.map);
 		this.roundText.setText('Round = ' + round);
     }
-	
-	// Add tap listeners to all pickups in the array, based on how close they are
-	for (var i = 0; i < drops.length; i++) {
-		}
 }
 
 function createEnemy(level, player, map) {
@@ -169,6 +170,12 @@ function createEnemy(level, player, map) {
 			enemies.push(enemy);
 			this.physics.add.overlap(player.hull, enemy.hull, meleeDamage, null, this);
 			break;
+			
+		case 3:
+			enemy = new Level3Enemy(this, enemySpawn.x, enemySpawn.y, player);
+			enemies.push(enemy);
+			this.physics.add.overlap(player.hull, enemy.hull, meleeDamage, null, this);
+			break;
 	}
 }	
 
@@ -186,7 +193,7 @@ function createRound(player, map) {
 	});
     console.log("Round Enemies = " + totalSpawn)
     for (var i = 0; i < totalSpawn; i++) {
-        var randLevel = Phaser.Math.Between(1, 2);
+        var randLevel = Phaser.Math.Between(1, 3);
         createEnemy.call(this, randLevel, player, map);
 
         // Add colliders to each enemy already in the array
@@ -301,15 +308,20 @@ function createDrop(level, locX, locY) {
 		return;
 	}
 	else {
-        if (spawnChance <= 10) {
+        if (spawnChance <= 5) {
 			speedDrop = new SpeedPowerup(this, locX, locY, player);
 			speedDrop.hull.setInteractive();
             drops.push(speedDrop);
 		}
-		else if (spawnChance >= 45 && spawnChance <= 55) {
+		else if (spawnChance >= 45 && spawnChance < 50) {
 			shotgunPickup = new ShotgunPickup(this, locX, locY, player);
 			shotgunPickup.hull.setInteractive();
 			drops.push(shotgunPickup);
+		}
+		else if (spawnChance >= 50 && spawnChance < 55) {
+			pistolPickup = new PistolPickup(this, locX, locY, player);
+			pistolPickup.hull.setInteractive();
+			drops.push(pistolPickup);
 		}
         else if (spawnChance >= 95) {
 			healthDrop = new HealthPowerup(this, locX, locY, player);
@@ -329,8 +341,13 @@ function useDrop(hull, playerHull) {
             break;
         }
     }
-	if (drop.dropType == 'speed') {	
-		player.setMaxSpeed(10);
+	if (drop.dropType == 'speed') {
+		if (player.maxSpeed != 350) {	
+			player.setMaxSpeed(10);
+		}
+		else {
+			// Nothing
+		}
 		drop.collected();
 		drops.splice(index, 1);
 	}
@@ -340,6 +357,10 @@ function useDrop(hull, playerHull) {
 		drops.splice(index, 1);
 	}
 	else if (drop.dropType == 'weapon_shotgun') {
+		drop.collected();
+		drops.splice(index, 1);
+	}
+	else if (drop.dropType == 'weapon_pistol') {
 		drop.collected();
 		drops.splice(index, 1);
 	}

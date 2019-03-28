@@ -118,3 +118,33 @@ class Level2Enemy extends BaseEnemy {
         }
 	}
 }
+
+class Level3Enemy extends BaseEnemy {
+    constructor(scene, x, y, player) {
+		var texture = 'enemy3'
+        super(scene, x, y, texture, player);
+		this.level = 3;
+        this.hull.body.setSize(this.hull.width - 16, this.hull.height - 16);
+        this.health = 2;
+        this.currentSpeed = 0;
+        this.alive = true;
+
+    }
+
+    update() {
+        if (this.alive == true) {
+            super.update(player);
+            this.currentSpeed = 200;
+
+            // Set the enemies target to be the player
+            this.targetX = this.player.x;
+            this.targetY = this.player.y;
+
+            this.scene.physics.velocityFromRotation(this.hull.rotation, this.currentSpeed, this.hull.body.velocity);
+        }
+    }
+
+    damage() {
+        super.damage();
+    }
+}

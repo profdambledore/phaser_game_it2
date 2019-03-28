@@ -12,7 +12,7 @@ class WeaponCtrl {
 		});
 		
 		this.shotgunBullets = this.scene.physics.add.group({
-			defaultKey: 'playerBullet',
+			defaultKey: 'playerPellet',
 			maxSize: 16
 		});
 	}

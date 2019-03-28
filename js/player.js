@@ -203,4 +203,18 @@ class ShotgunPickup extends BasePowerup {
 		super.collected();
 		player.setType(2);
 	}
+}
+
+class PistolPickup extends BasePowerup {
+	constructor(scene, x, y, player) {
+		var texture = 'pistol_pickup';
+		super(scene, x, y, texture, player);
+		this.dropType = 'weapon_shotgun';
+		this.hull.body.setSize(this.hull.width - 16, this.hull.height - 16);
+	}
+	
+	collected() {
+		super.collected();
+		player.setType(1);
+	}
 }	
