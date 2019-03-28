@@ -56,3 +56,22 @@ Errors found
   
 Targets
  - Add a pistol pickup, to change back to the base weapon
+ 
+ # Midday Session 28/3/19 - Updated Shotgun Pickup, Added Pistol Pickup, Modified Speed Pickup Limiter
+ 
+ Added a new pickup - a pistol pickup
+  - Allows the player to swap back to their original weapon, after collecting a shotgun pickup
+  
+ Further updates to shotgun pickup
+  - Now uses the playerPellet when firing, instead of playerBullet
+  - This is a separate sprite
+  
+Additions
+ - Modified speed text code, to actually limit to 10 max pickups
+ 
+New enemy - Square Enemy
+ - Cannot fire, speeds to enemy like circle
+ 
+Next steps
+ - Give square enemy an ability - slingshots inot player when it gets clsoe
+ 
